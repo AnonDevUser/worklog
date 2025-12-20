@@ -22,6 +22,7 @@ This version implements a high-fidelity frontend redesign using **Vanilla JavaSc
 
 ## 🛠 Tech Stack
 - **Backend**: Django (Python)
+- **Database**: **PostgreSQL (Hosted on Render)** with SSL for secure, cloud-native data persistence.
 - **Frontend**: Vanilla HTML5, CSS3 (Custom Variables), and Plain JavaScript.
 - **Icons**: Custom SVG icons and a centralized image logo branding.
 - **API Support**: AJAX-based CRUD operations (Fetch API) with built-in demonstration modes (dummy data) for UI walkthroughs.
@@ -35,4 +36,4 @@ The application is designed mobile-first. The sidebar navigation (hamburger menu
 - **Typography**: Clean, professional sans-serif fonts.
 
 ---
-*Created with Gemini 3 Flash*
+*this is the initial version 1.2.2.0*
