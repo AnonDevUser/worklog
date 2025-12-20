@@ -57,10 +57,67 @@ GLOBAL_CURRENCIES = {
 }
 
 def main(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     return render(request, 'book/main.html')
 
 def user_login(request):
-    return render(request, 'book/login.html')
+    if request.user.is_authenticated: #if user is already logged in, show dashboard 
+        return redirect('main')
+    if request.method == "POST": #if method is POST 
+        username = request.POST.get("username").strip()
+        password = request.POST.get("password")
+        remember = request.POST.get('remember', False)
+        
+        user = authenticate(request, username=username, password=password) #authenticate the user 
 
-def user_signup(request):
-    return render(request, 'book/signup.html', {'currencies': GLOBAL_CURRENCIES})
+        if user is not None: #if user exists 
+            login(request, user) #login 
+            set_session_time(request, remember_me=remember) #set session_time baded on the rememberme checkbox 
+            return redirect("main")
+        else: 
+            return render(request, "book/login.html", { #in case of no user to authenticate 
+                "error":"invalid credentials"
+            })
+    else: 
+        return render(request, 'book/login.html') #for GET method 
+
+def user_signup(request): 
+    context = {
+            'currencies':GLOBAL_CURRENCIES
+    }
+    if request.method == "POST": #if method is post 
+        username = request.POST.get("username").strip() #get all data from frontend 
+        email = request.POST.get("email").strip()
+        password = request.POST.get("confirm_password").strip()
+        currency = request.POST.get("currency").strip()
+
+        try:
+            #create the user 
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+            #add the user to UserProfile model 
+            profile = UserProfile.objects.create(user=user, currency=currency)
+            user = authenticate(request, username=username, password=password) #authenticate the user 
+            
+            if user:
+                login(request, user) #login 
+                set_session_time(request) #set default expiration 
+
+            return render(request, 'book/main.html', context)
+        except Exception as e:
+            print(e) #remove when producing 
+            return render(request, "book/signup.html", {
+                "error": "user already exists with that email or username"
+            }) 
+    return render(request, 'book/signup.html', context)
+
+def user_logout(request):
+    if not request.user.is_authenticated:
+        return redirect("main")
+    if request.method == "POST":
+        logout(request)
+        return redirect("main")
