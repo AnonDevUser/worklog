@@ -18,6 +18,7 @@ class Task(models.Model):
     start = models.TimeField(default=time(0, 0))  
     end = models.TimeField(default=time(0, 0))
     job_name = models.CharField(max_length=50, default="N/A")
+    payment_status = models.BooleanField(default=False)
     class Meta: #for better queries
         indexes = [
             models.Index(fields=['user', 'date']),
