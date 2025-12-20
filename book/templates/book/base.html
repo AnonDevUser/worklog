@@ -27,7 +27,7 @@
             <!-- Desktop Nav -->
             <nav class="header-nav desktop-only">
                 <button class="btn btn-pill" id="summary-btn">Summary</button>
-                <form action="#" method="post" style="display: inline;">
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-pill btn-dark">Sign Out</button>
                 </form>
@@ -48,7 +48,7 @@
         <div class="mobile-nav-content">
             <h2 class="logo-text" style="margin-bottom: 2rem;">Menu</h2>
             <button class="btn btn-pill" id="mobile-summary-btn">Summary</button>
-            <form action="#" method="post">
+            <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-pill btn-dark" style="width: 100%;">Sign Out</button>
             </form>

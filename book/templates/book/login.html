@@ -20,10 +20,10 @@
             <p style="color: var(--text-secondary); font-size: 0.9rem;">Sign in to your shift logger</p>
         </div>
 
-        {% if error_message %}
+        {% if error %}
         <div
             style="background: rgba(255, 95, 95, 0.1); color: #ff5f5f; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.85rem; border: 1px solid rgba(255, 95, 95, 0.2);">
-            {{ error_message }}
+            {{ error }}
         </div>
         {% endif %}
 
