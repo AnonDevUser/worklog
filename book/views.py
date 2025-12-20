@@ -1,6 +1,14 @@
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.models import User 
+from django.contrib.auth import login, logout, authenticate
+from .models import Task, UserProfile
 # ISO 4217 Currency Mapping
+def set_session_time(request, remember_me=False):
+    if remember_me:
+        request.session.set_expiry(2592000) #30 weeks 
+    else:
+        request.session.set_expiry(7200) #2 hours 
+    
 GLOBAL_CURRENCIES = {
     'USD': 'US Dollar ($)', 'EUR': 'Euro (€)', 'GBP': 'British Pound (£)', 'JPY': 'Japanese Yen (¥)',
     'INR': 'Indian Rupee (₹)', 'AUD': 'Australian Dollar ($)', 'CAD': 'Canadian Dollar ($)',
