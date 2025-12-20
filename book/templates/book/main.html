@@ -1,17 +1,132 @@
+{% extends 'book/base.html' %}
 {% load static %}
-<html>
 
-<head>
-    <title>
-        works
-    </title>
-</head>
+{% block title %}Dashboard - LogBook{% endblock %}
 
-<body>
-    <h1>works</h1>
-    <a href="{% url 'api_main' %}"> <button>
-            click me
-        </button></a>
-</body>
+{% block content %}
+<div class="main-content">
+    <!-- Desktop Table View -->
+    <div class="table-wrapper desktop-only">
+        <table class="shift-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">S.N</th>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Hourly</th>
+                    <th>Total Pay</th>
+                    <th>Job</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="shift-list-body">
+                <tr class="loading-row">
+                    <td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 5rem;">
+                        Loading shifts...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-</html>
+    <!-- Mobile Card View -->
+    <div class="mobile-only">
+        <div id="mobile-shift-list" class="mobile-card-list">
+            <p style="text-align: center; color: var(--text-secondary); padding: 5rem;">
+                Loading mobile view...
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Action Button (+ Log New Shift) -->
+<div style="position: fixed; bottom: 2rem; right: 2rem; z-index: 10;">
+    <button class="btn btn-accent" id="add-shift-btn"
+        style="box-shadow: 0 8px 32px rgba(0,0,0,0.4); padding: 1rem 1.75rem; border-radius: 1rem;">
+        <span style="font-size: 1.2rem; margin-right: 0.5rem;">+</span> Log Shift
+    </button>
+</div>
+
+<!-- Centered Modals -->
+
+<!-- Summary Modal -->
+<div class="modal-overlay" id="summary-modal">
+    <div class="modal-content">
+        <h2 class="logo-text" style="margin-bottom: 2rem;">Monthly Summary</h2>
+        <div id="summary-modal-body">
+            <div style="margin-bottom: 1.5rem;">
+                <p
+                    style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">
+                    Total Hours</p>
+                <h3 style="font-size: 2.5rem; letter-spacing: -0.02em;" id="modal-total-hours">0.00</h3>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <p
+                    style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">
+                    Total Earnings</p>
+                <h3 style="font-size: 2.5rem; color: var(--accent-color); letter-spacing: -0.02em;"
+                    id="modal-total-earnings">$0.00</h3>
+            </div>
+            <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                <div>
+                    <p style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 600;">TODAY</p>
+                    <p id="modal-today-hours" style="font-weight: 600;">0h</p>
+                </div>
+                <div>
+                    <p style="color: var(--text-secondary); font-size: 0.7rem; font-weight: 600;">THIS WEEK</p>
+                    <p id="modal-week-hours" style="font-weight: 600;">0h</p>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-pill" style="margin-top: 2.5rem; width: 100%; height: 3.5rem;"
+            id="close-summary">Done</button>
+    </div>
+</div>
+
+<!-- Form Modal (Add/Edit) -->
+<div class="modal-overlay" id="form-modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h2 class="logo-text" id="form-title" style="margin-bottom: 2rem;">Log New Shift</h2>
+        <form id="shift-data-form">
+            <input type="hidden" id="shift-id" name="id">
+            <div class="form-group">
+                <label>Job Description</label>
+                <input type="text" name="job" id="job-input" class="form-control" placeholder="What did you do?"
+                    required>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <input type="datetime-local" name="start_time" id="start-time-input" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>End Time</label>
+                    <input type="datetime-local" name="end_time" id="end-time-input" class="form-control" required>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label>Hourly Payment ($)</label>
+                    <input type="number" step="0.01" name="hourly_rate" id="hourly-rate-input" class="form-control"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label>Break (min)</label>
+                    <input type="number" name="break_duration" id="break-input" class="form-control" placeholder="0">
+                </div>
+            </div>
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-accent" style="flex: 2; height: 3.5rem;">Save Shift</button>
+                <button type="button" class="btn btn-pill" id="close-form"
+                    style="flex: 1; height: 3.5rem;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'book/js/main.js' %}"></script>
+{% endblock %}

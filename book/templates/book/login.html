@@ -1,0 +1,62 @@
+{% extends 'book/base.html' %}
+{% load static %}
+
+{% block title %}Login - LogBook{% endblock %}
+
+{% block navigation %}
+<header class="main-header" style="justify-content: center; border-bottom: none; background: transparent;">
+    <div class="logo-section" style="margin: 0 auto; padding-top: 1rem;">
+        <img src="{% static 'book/images/logo.png' %}" alt="LogBook Logo" style="height: 48px; width: auto;">
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 1rem;">
+    <div class="login-card"
+        style="width: 100%; max-width: 400px; background-color: #222; border-radius: 1.5rem; padding: 2.5rem; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 class="logo-text" style="font-size: 2rem; margin-bottom: 0.5rem;">Welcome Back</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Sign in to your shift logger</p>
+        </div>
+
+        {% if error_message %}
+        <div
+            style="background: rgba(255, 95, 95, 0.1); color: #ff5f5f; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.85rem; border: 1px solid rgba(255, 95, 95, 0.2);">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter username"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••"
+                    required>
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem;">
+                <input type="checkbox" id="remember" name="remember" style="accent-color: var(--accent-color);">
+                <label for="remember" style="margin-bottom: 0; font-size: 0.8rem;">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn btn-accent"
+                style="width: 100%; margin-top: 1.5rem; height: 3.5rem; font-weight: 700; border-radius: 1rem;">Sign
+                In</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Don't have an account? <a href="{% url 'signup' %}"
+                    style="color: var(--accent-color); text-decoration: none; font-weight: 600;">Sign Up</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
