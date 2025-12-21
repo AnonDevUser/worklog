@@ -18,6 +18,8 @@ class Task(models.Model):
     start = models.TimeField(default=time(0, 0))  
     end = models.TimeField(default=time(0, 0))
     job_name = models.CharField(max_length=50, default="N/A")
+    hourly_rate = models.DecimalField(max_length=5, max_digits=10, decimal_places=2, default=0.00)
+    break_duration = models.IntegerField(default=0) # in minutes
     payment_status = models.BooleanField(default=False)
     class Meta: #for better queries
         indexes = [

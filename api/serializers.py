@@ -12,4 +12,5 @@ class UserSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ['id', 'date', 'start', 'end', 'job_name', 'hourly_rate', 'break_duration', 'payment_status']
+        read_only_fields = ['id']
