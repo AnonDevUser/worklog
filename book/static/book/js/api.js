@@ -59,6 +59,7 @@ async function request(endpoint, options = {}) {
 
         if (!response.ok) {
             const error = new Error(data.message || 'API Request Failed');
+            console.log(error)
             error.status = response.status;
             error.data = data;
             throw error;

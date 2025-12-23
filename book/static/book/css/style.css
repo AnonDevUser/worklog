@@ -452,6 +452,15 @@ body {
     border-color: var(--accent-color);
 }
 
+.form-control:invalid:not(:placeholder-shown) {
+    border-color: rgba(255, 95, 95, 0.5);
+}
+
+.form-control:invalid:focus {
+    outline-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
 /* Simplified Login */
 .login-container {
     max-width: 100%;
