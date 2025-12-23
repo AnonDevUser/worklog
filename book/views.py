@@ -125,6 +125,8 @@ def user_signup(request):
             return render(request, "book/signup.html", {
                 "error": "user already exists with that email or username"
             }) 
+    elif request.user.is_authenticated:
+        return render(request, 'book/main.html')
     return render(request, 'book/signup.html', context)
 
 def user_logout(request):
