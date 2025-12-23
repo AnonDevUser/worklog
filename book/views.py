@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import re
 from django.contrib.auth.models import User 
 from django.contrib.auth import login, logout, authenticate
 from .models import Task, UserProfile
@@ -56,10 +57,20 @@ GLOBAL_CURRENCIES = {
     'XOF': 'West African CFA Franc (CFA)', 'XPF': 'CFP Franc (F)', 'YER': 'Yemeni Rial (﷼)',
 }
 
+def get_currency_symbol(currency_code):
+    value = GLOBAL_CURRENCIES.get(currency_code, 'US Dollar ($)')
+    match = re.search(r'\((.*?)\)', value)
+    return match.group(1) if match else '$'
+
 def main(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, 'book/main.html')
+    
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    context = {
+        'currency_symbol': get_currency_symbol(profile.currency)
+    }
+    return render(request, 'book/main.html', context)
 
 def user_login(request):
     if request.user.is_authenticated: #if user is already logged in, show dashboard 
@@ -107,6 +118,7 @@ def user_signup(request):
                 login(request, user) #login 
                 set_session_time(request) #set default expiration 
 
+            context['currency_symbol'] = get_currency_symbol(currency)
             return render(request, 'book/main.html', context)
         except Exception as e:
             print(e) #remove when producing 

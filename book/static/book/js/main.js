@@ -113,9 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${formatDate(shift.date)}</td>
                     <td>${formatTime(shift.start)}</td>
                     <td>${formatTime(shift.end)}</td>
-                    <td>$${shift.hourly_rate}</td>
+                    <td>${window.USER_CURRENCY_SYMBOL}${shift.hourly_rate}</td>
                     <td>
-                        $${earnings}
+                        ${window.USER_CURRENCY_SYMBOL}${earnings}
                         ${!shift.payment_status ? '<span class="badge badge-due">DUE</span>' : ''}
                     </td>
                     <td>${shift.job_name || '---'}</td>
@@ -137,11 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="mobile-shift-card" data-id="${shift.id}">
                     <div class="card-header">
                         <span class="card-date">${formatDate(shift.date)}</span>
-                        <span class="card-pay">$${earnings}</span>
+                        <span class="card-pay">${window.USER_CURRENCY_SYMBOL}${earnings}</span>
                     </div>
                     <div class="card-body">
                         <p class="card-job">${shift.job_name || 'Unnamed Job'}</p>
-                        <p class="card-times">${formatTime(shift.start)} → ${formatTime(shift.end)} ($${shift.hourly_rate}/h)</p>
+                        <p class="card-times">${formatTime(shift.start)} → ${formatTime(shift.end)} (${window.USER_CURRENCY_SYMBOL}${shift.hourly_rate}/h)</p>
                     </div>
                     <div class="card-footer">
                         <div>
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const data = await ApiClient.getSummary();
             document.getElementById('modal-total-hours').textContent = data.total_hours.toFixed(2);
-            document.getElementById('modal-total-earnings').textContent = `$${data.total_earnings.toFixed(2)}`;
+            document.getElementById('modal-total-earnings').textContent = `${window.USER_CURRENCY_SYMBOL}${data.total_earnings.toFixed(2)}`;
             // Note: today and week hours logic would ideally be in backend or calculated from list
             document.getElementById('modal-today-hours').textContent = `${data.total_hours.toFixed(1)}h`;
             document.getElementById('modal-week-hours').textContent = `${data.total_hours.toFixed(1)}h`;
