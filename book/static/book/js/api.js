@@ -117,7 +117,19 @@ export const ApiClient = {
      */
     async getSummary() {
         return request('/summary/');
+    },
+
+    /**
+     * Delete a task
+     * @param {number} id - The task ID
+     */
+    async deleteTask(id) {
+        return request('/delete-task/', {
+            method: 'POST',
+            body: JSON.stringify({ id })
+        });
     }
 };
+
 
 export default ApiClient;

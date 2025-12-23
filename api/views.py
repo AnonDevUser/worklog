@@ -96,3 +96,16 @@ def summary(request):
         "total_unpaid": total_unpaid
     }
     return Response(data, status=200)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def delete_task(request):
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    task_id = request.data.get('id')
+    if not task_id:
+        return Response({"error": "Task ID is required"}, status=400)
+    
+    task = get_object_or_404(Task, id=task_id, user=profile)
+    task.delete()
+    return Response({"message": "Task deleted successfully"}, status=200)
+

@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${shift.job_name || '---'}</td>
                     <td style="text-align: right;">
                         <div class="action-btns">
-                            <button class="btn-text" data-action="settle" data-id="${shift.id}">${shift.payment_status ? 'Paid' : 'Settle'}</button>
+                            <button class="btn-text" data-action="settle" data-id="${shift.id}">${shift.payment_status ? 'Mark Due' : 'Settle'}</button>
                             <button class="btn-text" data-action="edit" data-id="${shift.id}">Edit</button>
                             <button class="btn-text btn-delete" data-action="delete" data-id="${shift.id}">Delete</button>
                         </div>
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${!shift.payment_status ? '<span class="badge badge-due">Awaiting Payment</span>' : '<span style="color: var(--accent-color); font-size: 0.7rem; font-weight: 700;">PAID</span>'}
                         </div>
                         <div class="action-btns">
-                            <button class="btn-text" data-action="settle" data-id="${shift.id}">Settle</button>
+                            <button class="btn-text" data-action="settle" data-id="${shift.id}">${shift.payment_status ? 'Mark Due' : 'Settle'}</button>
                             <button class="btn-text" data-action="edit" data-id="${shift.id}">Edit</button>
                             <button class="btn-text btn-delete" data-action="delete" data-id="${shift.id}">Delete</button>
                         </div>
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', (e) => {
                 const action = btn.dataset.action;
                 const id = parseInt(btn.dataset.id);
-                if (action === 'settle') settleShift(id);
+                if (action === 'settle') settleShift(id, shifts);
                 if (action === 'edit') prepareEdit(id, shifts);
                 if (action === 'delete') deleteShift(id);
             });
@@ -260,22 +260,27 @@ document.addEventListener('DOMContentLoaded', () => {
     async function deleteShift(id) {
         if (!confirm('Are you sure you want to delete this shift?')) return;
         try {
-            // Note: Specification doesn't have delete, but implementation usually uses DELETE /api/edit-task/ with ID?
-            // Since we don't have a dedicated delete endpoint in views.py, I'll skip for now or use edit with a flag?
-            // Actually, let's assume we might need a delete endpoint later if user asks.
-            alert('Delete functionality not yet implemented in backend API.');
+            await ApiClient.deleteTask(id);
+            fetchShifts();
         } catch (error) {
-            console.error(error);
+            console.error('Failed to delete shift:', error);
+            alert('Failed to delete shift');
         }
     }
 
     // Settle Shift
-    async function settleShift(id) {
+    async function settleShift(id, currentShifts) {
+        const shift = currentShifts.find(s => s.id === id);
+        if (!shift) return;
+
         try {
-            await ApiClient.updateTask({ id, payment_status: true });
+            await ApiClient.updateTask({
+                id,
+                payment_status: !shift.payment_status
+            });
             fetchShifts();
         } catch (error) {
-            console.error(error);
+            console.error('Failed to update payment status:', error);
         }
     }
 
