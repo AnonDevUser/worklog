@@ -5,7 +5,7 @@ LogBook is a modern, high-fidelity web application designed for workers and free
 ## 👥 Credits
 
 - **Frontend Development**: Gemini 3 Flash
-- **Backend Infrastructure**: [GitHub User]
+- **Backend Infrastructure**: AnonDevUser
 
 ## ✨ Key Features
 
