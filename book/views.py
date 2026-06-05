@@ -3,6 +3,9 @@ import re
 from django.contrib.auth.models import User 
 from django.contrib.auth import login, logout, authenticate
 from .models import Task, UserProfile
+from logbook.mongo import task
+from django.utils import timezone
+from datetime import time
 # ISO 4217 Currency Mapping
 def set_session_time(request, remember_me=False):
     if remember_me:
@@ -135,3 +138,16 @@ def user_logout(request):
     if request.method == "POST":
         logout(request)
         return redirect("main")
+    
+def testDB(request):
+    task.insert_one({
+        "user": request.user.id,
+        "date": timezone.now(),
+        "start": "test",
+        "end:": "test",
+        "job_name":"test",
+        "hourly_rate":0,
+        "break_duration":0,
+        "payment_status":False
+    })
+    return render(request, 'book/main.html')
